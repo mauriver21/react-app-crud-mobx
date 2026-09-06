@@ -12,24 +12,26 @@ export class ProductStore {
     this.products = products;
   }
 
-  read(id: string) {
-    return this.products.find((item) => item.id === id);
+  save(product: Product) {
+    if (this.products.some((item) => item.id === product.id)) {
+      this.update(product);
+    }
   }
 
   create(product: Product) {
     this.products.push(product);
   }
 
-  update(id: string, product: Product) {
+  update(product: Product) {
     this.products.map((item) => {
-      if (item.id === id) {
+      if (item.id === product.id) {
         return { ...item, ...product };
       }
       return item;
     });
   }
 
-  remove(id: string) {
+  remove(id: string | undefined) {
     this.products.filter((item) => item.id !== id);
   }
 }
