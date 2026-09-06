@@ -28,5 +28,14 @@ export const useProductModel = () => {
     productStore.remove(id);
   };
 
-  return { list, read, create, update, remove };
+  return {
+    list,
+    read,
+    create,
+    update,
+    remove,
+    store: {
+      products: productStore.products,
+    },
+  };
 };
