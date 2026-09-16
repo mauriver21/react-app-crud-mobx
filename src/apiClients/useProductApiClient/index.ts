@@ -6,8 +6,9 @@ import { api } from '@/utils/api';
 
 export const useProductApiClient = () => {
   const list = async (params: ListParams) => {
-    console.log(params);
-    const { data } = await api.get<PaginatedList<Product>>('/products');
+    const { data } = await api.get<PaginatedList<Product>>('/products', {
+      params: { ...params.pagination },
+    });
     return data;
   };
 

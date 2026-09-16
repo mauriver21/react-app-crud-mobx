@@ -1,7 +1,10 @@
 import { createRoot } from 'react-dom/client';
 import { App } from './App.tsx';
 import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider, CssBaseline, createTheme } from '@mui/material';
 import './index.css';
+
+const theme = createTheme();
 
 const run = async () => {
   if (import.meta.env.DEV) {
@@ -10,9 +13,12 @@ const run = async () => {
   }
 
   createRoot(document.getElementById('root')!).render(
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>,
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ThemeProvider>,
   );
 };
 
