@@ -1,3 +1,4 @@
+import type { Id } from '@/interfaces/Id';
 import type { ListParams } from '@/interfaces/ListParams';
 import type { PaginatedList } from '@/interfaces/PaginatedList';
 import type { Product } from '@/interfaces/Product';
@@ -10,7 +11,7 @@ export const useProductApiClient = () => {
     return data;
   };
 
-  const read = async (id: string) => {
+  const read = async (id: Id) => {
     const { data } = await api.get<Product>(`/products/${id}`);
     return data;
   };

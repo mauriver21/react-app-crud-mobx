@@ -3,6 +3,7 @@ import { productStore } from '@/stores/ProductStore';
 import type { Product } from '@/interfaces/Product';
 import type { ListParams } from '@/interfaces/ListParams';
 import type { ProductFilters } from '@/interfaces/ProductFilters';
+import type { Id } from '@/interfaces/Id';
 
 export const useProductModel = () => {
   const productApiClient = useProductApiClient();
@@ -14,7 +15,7 @@ export const useProductModel = () => {
     });
   };
 
-  const read = async (id: string) => {
+  const read = async (id: Id) => {
     return productStore.save(await productApiClient.read(id));
   };
 
@@ -26,12 +27,16 @@ export const useProductModel = () => {
     productStore.save(await productApiClient.update(product));
   };
 
-  const remove = async (id: string | undefined) => {
+  const remove = async (id: Id) => {
     productStore.remove(id);
   };
 
   const selectPaginatedProducts = (params: ListParams<ProductFilters>) => {
     return productStore.selectPaginatedList(params);
+  };
+
+  const selectProduct = (id: Id) => {
+    return productStore.selectById(id);
   };
 
   return {
@@ -41,5 +46,6 @@ export const useProductModel = () => {
     update,
     remove,
     selectPaginatedProducts,
+    selectProduct,
   };
 };

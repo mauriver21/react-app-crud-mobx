@@ -76,5 +76,9 @@ export const createQueryStateHandler = <TEntity>(args: {
     };
   };
 
-  return { saveById, saveQuery, removeById, selectQuery };
+  const selectEntity = (entityId: Id): TEntity | undefined => {
+    return queryState.byId[String(entityId)];
+  };
+
+  return { saveById, saveQuery, removeById, selectQuery, selectEntity };
 };

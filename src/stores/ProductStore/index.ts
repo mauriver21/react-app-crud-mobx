@@ -37,6 +37,10 @@ export class ProductStore implements BaseQueryStore<Product> {
   selectPaginatedList(params: ListParams<ProductFilters>) {
     return this.stateHandler.selectQuery(params);
   }
+
+  selectById(id: Id) {
+    return this.stateHandler.selectEntity(id);
+  }
 }
 
 export const productStore = new ProductStore();
