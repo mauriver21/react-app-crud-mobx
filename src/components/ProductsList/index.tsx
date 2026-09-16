@@ -1,4 +1,14 @@
 import { useProductModel } from '@/models/useProductModel';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import { observer } from 'mobx-react';
 import { useEffect } from 'react';
 
@@ -13,9 +23,26 @@ export const ProductsList: React.FC = observer(() => {
   }, []);
 
   return (
-    <code>
-      <pre>{JSON.stringify(content, null, 2)}</pre>
-      <pre>{JSON.stringify(pagination, null, 2)}</pre>
-    </code>
+    <TableContainer component={Paper}>
+      <Typography variant="h6" sx={{ p: 2 }}>
+        Products ({pagination.totalElements})
+      </Typography>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell align="right">Price</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {content.map((product) => (
+            <TableRow key={product.id} hover>
+              <TableCell>{product.name}</TableCell>
+              <TableCell align="right">${product.price.toFixed(2)}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 });
