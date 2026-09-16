@@ -2,6 +2,7 @@ import { delay, http, HttpResponse } from 'msw';
 import type { Product } from '@/interfaces/Product';
 import { data } from '@/mocks/data';
 import { ENV } from '@/constants/env';
+import { paginateData } from '@/utils/paginateData';
 
 export const productHandler = [
   // List
@@ -12,13 +13,18 @@ export const productHandler = [
     const page = Math.max(1, Number(url.searchParams.get('page') ?? 1));
     const size = Math.max(1, Number(url.searchParams.get('size') ?? 20));
 
+    const { content, totalPages } = paginateData(products, {
+      limit: size,
+      page,
+    });
+
     return HttpResponse.json({
-      content: data.products,
+      content,
       pagination: {
         page,
         size,
         totalElements: products.length,
-        totalPages: Math.max(1, Math.ceil(products.length / size)),
+        totalPages,
       },
     });
   }),
