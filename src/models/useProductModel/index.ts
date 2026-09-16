@@ -1,15 +1,13 @@
 import { useProductApiClient } from '@/apiClients/useProductApiClient';
+import { productStore } from '@/stores/ProductStore';
 import type { Product } from '@/interfaces/Product';
-import { ProductStore } from '@/stores/ProductStore';
-import { useMemo } from 'react';
 
 export const useProductModel = () => {
-  const productStore = useMemo(() => new ProductStore(), []);
   const productApiClient = useProductApiClient();
 
   const list = async () => {
     const { content } = await productApiClient.list();
-    productStore.products = content;
+    productStore.list(content);
   };
 
   const read = async (id: string) => {
@@ -28,14 +26,14 @@ export const useProductModel = () => {
     productStore.remove(id);
   };
 
+  const selectProducts = () => productStore.products;
+
   return {
     list,
     read,
     create,
     update,
     remove,
-    store: {
-      products: productStore.products,
-    },
+    selectProducts,
   };
 };

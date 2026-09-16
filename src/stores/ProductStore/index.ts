@@ -8,7 +8,7 @@ export class ProductStore {
     makeAutoObservable(this);
   }
 
-  list(products: []) {
+  list(products: Product[]) {
     this.products = products;
   }
 
@@ -35,3 +35,5 @@ export class ProductStore {
     this.products.filter((item) => item.id !== id);
   }
 }
+
+export const productStore = new ProductStore();
