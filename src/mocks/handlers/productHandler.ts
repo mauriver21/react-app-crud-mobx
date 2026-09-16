@@ -10,8 +10,8 @@ export const productHandler = [
     await delay(650);
     const products = data.products;
     const url = new URL(request.url);
-    const page = Math.max(1, Number(url.searchParams.get('page') ?? 1));
-    const size = Math.max(1, Number(url.searchParams.get('size') ?? 20));
+    const page = Number(url.searchParams.get('page'));
+    const size = Number(url.searchParams.get('size'));
 
     const { content, totalPages } = paginateData(products, {
       limit: size,

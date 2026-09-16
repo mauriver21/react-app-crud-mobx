@@ -12,7 +12,7 @@ export const MainLayout: React.FC = () => {
       }}
     >
       <Box sx={{ overflow: 'auto' }}>Sidebar</Box>
-      <Box sx={{ overflow: 'auto' }}>
+      <Box sx={{ display: 'grid', overflow: 'auto' }}>
         <Outlet />
       </Box>
     </Box>
