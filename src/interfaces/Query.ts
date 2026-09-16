@@ -1,7 +1,8 @@
 import type { PaginationResponse } from '@/interfaces/PaginationResponse';
+import type { Id } from './Id';
 
 export type Query = {
   queryId: string;
-  entityIds: Array<string | number>;
+  entityIds: Id[];
   pagination: PaginationResponse;
 };

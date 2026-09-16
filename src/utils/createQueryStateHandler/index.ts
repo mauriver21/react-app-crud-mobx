@@ -9,15 +9,14 @@ export const createQueryStateHandler = <TEntity>(args: {
   entityIdName: string;
 }) => {
   const { queryState, entityIdName } = args;
-  const { byId } = queryState;
 
   const saveById = (entity: TEntity) => {
     const id = (entity as any)?.[entityIdName] as string;
-    byId[String(id)] = entity;
+    queryState.byId[String(id)] = entity;
   };
 
   const removeById = (id: Id) => {
-    id && delete byId[id];
+    id && delete queryState.byId[id];
   };
 
   const buildQueryId = (params: ListParams) => {
@@ -34,7 +33,7 @@ export const createQueryStateHandler = <TEntity>(args: {
   const queryIdsToEntities = (entityIds: Id[]): TEntity[] => {
     const entities: TEntity[] = [];
     for (const id of entityIds) {
-      if (id) entities.push(byId[String(id)]);
+      if (id) entities.push(queryState.byId[String(id)]);
     }
 
     return entities;
@@ -44,7 +43,12 @@ export const createQueryStateHandler = <TEntity>(args: {
     const queryId = buildQueryId(params);
     const foundQuery = findQuery(queryId);
     const entities = params.paginatedList.content;
-    const entityIds = entities.map((entity) => (entity as any)?.[entityIdName]);
+    const entityIds: Id[] = [];
+
+    for (const entity of entities) {
+      entityIds.push((entity as any)?.[entityIdName]);
+      saveById(entity);
+    }
 
     if (foundQuery) {
       foundQuery.entityIds = entityIds;
