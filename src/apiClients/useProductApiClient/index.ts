@@ -1,10 +1,12 @@
-import type { ListResponse } from '@/interfaces/ListResponse';
+import type { ListParams } from '@/interfaces/ListParams';
+import type { PaginatedList } from '@/interfaces/PaginatedList';
 import type { Product } from '@/interfaces/Product';
 import { api } from '@/utils/api';
 
 export const useProductApiClient = () => {
-  const list = async () => {
-    const { data } = await api.get<ListResponse<Product>>('/products');
+  const list = async (params: ListParams) => {
+    console.log(params);
+    const { data } = await api.get<PaginatedList<Product>>('/products');
     return data;
   };
 
