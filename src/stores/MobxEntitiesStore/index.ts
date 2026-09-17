@@ -1,17 +1,13 @@
 import type { Id } from '@/interfaces/Id';
 import type { ListParams } from '@/interfaces/ListParams';
 import type { ListQueryParams } from '@/interfaces/ListQueryParams';
-import type { QueryState } from '@/interfaces/QueryState';
-import type { QueryStateHandler } from '@/interfaces/QueryStateHandler';
+import type { MobxEntityStore } from '@/interfaces/MobxEntityStore';
 import { createQueryState } from '@/utils/createQueryState';
 import { createQueryStateHandler } from '@/utils/createQueryStateHandler';
 import { makeAutoObservable } from 'mobx';
 
 class MobxEntitiesStore {
-  stores: Record<
-    string,
-    { state: QueryState; stateHandler: QueryStateHandler }
-  > = {};
+  stores: Record<string, MobxEntityStore> = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -22,11 +18,18 @@ class MobxEntitiesStore {
     entityIdName: string;
   }) {
     const { entityName, entityIdName } = args;
-    this.stores[entityName].state = createQueryState();
-    this.stores[entityName].stateHandler = createQueryStateHandler({
-      entityIdName,
-      queryState: this.stores[entityName].state,
-    });
+    const storeExists = Boolean(this.stores[entityName]);
+
+    if (!storeExists) {
+      const state = createQueryState<TEntity>();
+      this.stores[entityName] = {
+        state,
+        stateHandler: createQueryStateHandler<TEntity>({
+          entityIdName,
+          queryState: state,
+        }),
+      } as MobxEntityStore;
+    }
 
     const list = (params: ListQueryParams<TEntity, TFilters>) => {
       this.stores[entityName].stateHandler.saveQuery(params);

@@ -74,5 +74,6 @@ export const useProductModel = () => {
     create,
     update,
     remove,
+    selectPaginatedProducts,
   };
 };

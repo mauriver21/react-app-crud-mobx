@@ -6,6 +6,7 @@ import {
   type QueryHandlers,
 } from '@/interfaces/MobxModelTypes';
 import { mobxEntitiesStore } from '@/stores/MobxEntitiesStore';
+import { useMemo } from 'react';
 
 export const useMobxModel = <
   TEntity = unknown,
@@ -15,7 +16,7 @@ export const useMobxModel = <
   args: MobxModelParams<TEntity, TFilters, THandlers>,
 ) => {
   const { handlers } = args;
-  const modelStore = mobxEntitiesStore.createStore(args);
+  const modelStore = useMemo(() => mobxEntitiesStore.createStore(args), []);
 
   const buildModelMethods = (): ModelMethods<THandlers> => {
     const modelMethods = {} as Record<string, unknown>;
@@ -72,5 +73,9 @@ export const useMobxModel = <
     return modelMethods as ModelMethods<THandlers>;
   };
 
-  return { ...buildModelMethods(), ...modelStore };
+  return {
+    ...buildModelMethods(),
+    selectPaginatedList: modelStore.selectPaginatedList,
+    selectById: modelStore.selectById,
+  };
 };

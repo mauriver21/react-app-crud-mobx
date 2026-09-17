@@ -61,7 +61,7 @@ export const createQueryStateHandler = <TEntity>(args: {
     }
   };
 
-  const selectQuery = (params: ListParams<TEntity>): PaginatedList<TEntity> => {
+  const selectQuery = (params: ListParams): PaginatedList<TEntity> => {
     const queryId = buildQueryId(params);
     const foundQuery = findQuery(queryId);
     return {
