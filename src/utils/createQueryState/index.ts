@@ -1,6 +1,6 @@
 import type { QueryState } from '@/interfaces/QueryState';
 
-export const createQueryState = <T>(): QueryState<T> => ({
+export const createQueryState = <T = unknown>(): QueryState<T> => ({
   queries: [],
   byId: {},
 });

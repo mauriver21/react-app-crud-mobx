@@ -30,7 +30,7 @@ export const useProductApiClient = () => {
     return data;
   };
 
-  const remove = async (id: string) => {
+  const remove = async (id: Id) => {
     const { data } = await api.delete<Product>(`/products/${id}`);
     return data;
   };

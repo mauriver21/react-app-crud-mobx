@@ -1,43 +1,72 @@
-import { useProductApiClient } from '@/apiClients/useProductApiClient';
-import { productStore } from '@/stores/ProductStore';
 import type { Product } from '@/interfaces/Product';
 import type { ListParams } from '@/interfaces/ListParams';
 import type { ProductFilters } from '@/interfaces/ProductFilters';
 import type { Id } from '@/interfaces/Id';
+import { useMobxModel } from '../useMobxModel';
+import {
+  EntityActionType,
+  type ListQueryHandler,
+  type CreateQueryHandler,
+  type UpdateQueryHandler,
+  type ReadQueryHandler,
+  type RemoveQueryHandler,
+} from '@/interfaces/MobxModelTypes';
+import { useProductApiClient } from '@/apiClients/useProductApiClient';
 
 export const useProductModel = () => {
   const productApiClient = useProductApiClient();
+  const mobxModel = useMobxModel<
+    Product,
+    ProductFilters,
+    {
+      list: ListQueryHandler<Product, ProductFilters>;
+      create: CreateQueryHandler<Product>;
+      update: UpdateQueryHandler<Product>;
+      read: ReadQueryHandler<Product>;
+      remove: RemoveQueryHandler<Product>;
+    }
+  >({
+    entityIdName: 'id',
+    entityName: 'products',
+    handlers: {
+      list: { action: EntityActionType.List, apiFn: productApiClient.list },
+      create: {
+        action: EntityActionType.Create,
+        apiFn: productApiClient.create,
+      },
+      update: {
+        action: EntityActionType.Update,
+        apiFn: productApiClient.update,
+      },
+      read: { action: EntityActionType.Read, apiFn: productApiClient.read },
+      remove: {
+        action: EntityActionType.Remove,
+        apiFn: productApiClient.remove,
+      },
+    },
+  });
 
-  const list = async (params: ListParams<ProductFilters>) => {
-    productStore.list({
-      ...params,
-      paginatedList: await productApiClient.list(params),
-    });
+  const list = (params: ListParams<ProductFilters>) => {
+    return mobxModel.list(params);
   };
 
-  const read = async (id: Id) => {
-    return productStore.save(await productApiClient.read(id));
+  const read = (id: Id) => {
+    return mobxModel.read(id);
   };
 
-  const create = async (product: Product) => {
-    productStore.save(await productApiClient.create(product));
+  const create = (product: Product) => {
+    return mobxModel.create(product);
   };
 
-  const update = async (product: Product) => {
-    productStore.save(await productApiClient.update(product));
+  const update = (product: Product) => {
+    return mobxModel.update(product);
   };
 
-  const remove = async (id: Id) => {
-    productStore.remove(id);
+  const remove = (id: Id) => {
+    return mobxModel.remove(id);
   };
 
-  const selectPaginatedProducts = (params: ListParams<ProductFilters>) => {
-    return productStore.selectPaginatedList(params);
-  };
-
-  const selectProduct = (id: Id) => {
-    return productStore.selectById(id);
-  };
+  const selectPaginatedProducts = mobxModel.selectPaginatedList;
 
   return {
     list,
@@ -45,7 +74,5 @@ export const useProductModel = () => {
     create,
     update,
     remove,
-    selectPaginatedProducts,
-    selectProduct,
   };
 };
