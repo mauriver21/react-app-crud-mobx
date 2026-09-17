@@ -4,7 +4,7 @@ import type { ListQueryParams } from '@/interfaces/ListQueryParams';
 import type { MobxEntityStore } from '@/interfaces/MobxEntityStore';
 import { createQueryState } from '@/utils/createQueryState';
 import { createQueryStateHandler } from '@/utils/createQueryStateHandler';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, observable } from 'mobx';
 
 class MobxEntitiesStore {
   stores: Record<string, MobxEntityStore> = {};
@@ -21,7 +21,7 @@ class MobxEntitiesStore {
     const storeExists = Boolean(this.stores[entityName]);
 
     if (!storeExists) {
-      const state = createQueryState<TEntity>();
+      const state = observable(createQueryState<TEntity>());
       this.stores[entityName] = {
         state,
         stateHandler: createQueryStateHandler<TEntity>({
