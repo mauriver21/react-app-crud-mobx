@@ -17,8 +17,11 @@ export const ProductsList: React.FC = observer(() => {
   const productModel = useProductModel();
   const [pagination, setPagination] = useState({ page: 0, size: 10 });
 
-  const { content, pagination: paginationMeta } =
-    productModel.selectPaginatedProducts({ pagination });
+  const {
+    content,
+    pagination: paginationMeta,
+    listed,
+  } = productModel.selectPaginatedProducts({ pagination });
 
   useEffect(() => {
     productModel.list({ pagination });
@@ -35,7 +38,8 @@ export const ProductsList: React.FC = observer(() => {
   return (
     <Paper sx={{ overflow: 'auto', display: 'grid' }}>
       <Typography variant="h6" sx={{ p: 2 }}>
-        Products ({paginationMeta.totalElements})
+        Products ({paginationMeta.totalElements}){' '}
+        {listed ? 'Loaded' : 'Initial loading...'}
       </Typography>
       <TableContainer sx={{ overflow: 'auto' }}>
         <Table>

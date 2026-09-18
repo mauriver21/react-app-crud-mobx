@@ -3,6 +3,7 @@ import type { ListParams } from '@/interfaces/ListParams';
 import type { ListQueryParams } from '@/interfaces/ListQueryParams';
 import type { MobxEntityStore } from '@/interfaces/MobxEntityStore';
 import type { PaginatedList } from '@/interfaces/PaginatedList';
+import type { SelectedQuery } from '@/interfaces/SelectedQuery';
 import { createQueryState } from '@/utils/createQueryState';
 import { createQueryStateHandler } from '@/utils/createQueryStateHandler';
 import { makeAutoObservable, observable } from 'mobx';
@@ -23,7 +24,7 @@ class MobxEntitiesStore {
 
     if (!storeExists) {
       const state = observable(createQueryState<TEntity>());
-      const stateHandler = createQueryStateHandler<TEntity>({
+      const stateHandler = createQueryStateHandler<TEntity, TFilters>({
         entityIdName,
         queryState: state,
       });
@@ -45,9 +46,25 @@ class MobxEntitiesStore {
       this.stores[entityName].stateHandler.removeById(id);
     };
 
+    const setListing = (args: { params: ListParams; flag: boolean }) => {
+      this.stores[entityName].stateHandler.setListing(args);
+    };
+
+    const setListed = (params: ListParams) => {
+      this.stores[entityName].stateHandler.setListed(params);
+    };
+
+    const setReading = (args: { id: Id; flag: boolean }) => {};
+
+    const setCreating = (args: { id: Id; flag: boolean }) => {};
+
+    const setUpdating = (args: { id: Id; flag: boolean }) => {};
+
+    const setRemoving = (args: { id: Id; flag: boolean }) => {};
+
     const selectPaginatedList = (
       params: ListParams<TFilters>,
-    ): PaginatedList<TEntity> => {
+    ): SelectedQuery<TEntity> => {
       return this.stores[entityName].stateHandler.selectQuery(params);
     };
 
@@ -61,6 +78,12 @@ class MobxEntitiesStore {
       remove,
       selectPaginatedList,
       selectById,
+      setListing,
+      setListed,
+      setReading,
+      setCreating,
+      setUpdating,
+      setRemoving,
     };
   }
 }

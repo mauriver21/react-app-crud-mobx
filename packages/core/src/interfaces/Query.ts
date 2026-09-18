@@ -1,8 +1,10 @@
 import type { PaginationResponse } from '@/interfaces/PaginationResponse';
 import type { Id } from './Id';
+import type { QueryFlags } from '@/interfaces/QueryFlags';
 
 export type Query = {
+  flags?: QueryFlags;
   queryId: string;
-  entityIds: Id[];
-  pagination: PaginationResponse;
+  entityIds?: Id[];
+  pagination?: PaginationResponse;
 };
