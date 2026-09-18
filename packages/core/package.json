@@ -1,0 +1,40 @@
+{
+  "name": "use-mobx-model",
+  "version": "0.0.1",
+  "type": "module",
+  "author": {
+    "name": "Mauricio Rivera"
+  },
+  "source": "./src",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "peerDependencies": {
+    "mobx": ">=7.0.0",
+    "react": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "mobx": "^7.0.3",
+    "react": "^19.0.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.2",
+    "vite-plugin-dts": "^4.5.3",
+    "vite-tsconfig-paths": "^6.1.1"
+  }
+}
