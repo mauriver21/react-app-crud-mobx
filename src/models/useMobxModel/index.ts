@@ -16,7 +16,10 @@ export const useMobxModel = <
   args: MobxModelParams<TEntity, TFilters, THandlers>,
 ) => {
   const { handlers } = args;
-  const modelStore = useMemo(() => mobxEntitiesStore.createStore(args), []);
+  const modelStore = useMemo(
+    () => mobxEntitiesStore.createStore<TEntity, TFilters>(args),
+    [],
+  );
 
   const buildModelMethods = (): ModelMethods<THandlers> => {
     const modelMethods = {} as Record<string, unknown>;

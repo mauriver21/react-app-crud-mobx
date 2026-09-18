@@ -2,6 +2,7 @@ import type { Id } from '@/interfaces/Id';
 import type { ListParams } from '@/interfaces/ListParams';
 import type { ListQueryParams } from '@/interfaces/ListQueryParams';
 import type { MobxEntityStore } from '@/interfaces/MobxEntityStore';
+import type { PaginatedList } from '@/interfaces/PaginatedList';
 import { createQueryState } from '@/utils/createQueryState';
 import { createQueryStateHandler } from '@/utils/createQueryStateHandler';
 import { makeAutoObservable, observable } from 'mobx';
@@ -22,13 +23,14 @@ class MobxEntitiesStore {
 
     if (!storeExists) {
       const state = observable(createQueryState<TEntity>());
+      const stateHandler = createQueryStateHandler<TEntity>({
+        entityIdName,
+        queryState: state,
+      });
       this.stores[entityName] = {
         state,
-        stateHandler: createQueryStateHandler<TEntity>({
-          entityIdName,
-          queryState: state,
-        }),
-      } as MobxEntityStore;
+        stateHandler,
+      };
     }
 
     const list = (params: ListQueryParams<TEntity, TFilters>) => {
@@ -43,11 +45,13 @@ class MobxEntitiesStore {
       this.stores[entityName].stateHandler.removeById(id);
     };
 
-    const selectPaginatedList = (params: ListParams<TFilters>) => {
+    const selectPaginatedList = (
+      params: ListParams<TFilters>,
+    ): PaginatedList<TEntity> => {
       return this.stores[entityName].stateHandler.selectQuery(params);
     };
 
-    const selectById = (id: Id) => {
+    const selectById = (id: Id): TEntity => {
       return this.stores[entityName].stateHandler.selectEntity(id);
     };
 

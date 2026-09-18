@@ -1,6 +1,6 @@
 import type { Query } from '@/interfaces/Query';
 
-export interface QueryState<T = unknown> {
+export interface QueryState<TEntity = unknown> {
   queries: Query[];
-  byId: Record<string, T>;
+  byId: Record<string, TEntity>;
 }
