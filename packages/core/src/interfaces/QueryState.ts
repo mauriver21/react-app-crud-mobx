@@ -1,4 +1,4 @@
-import type { Query } from '@/interfaces/Query';
+import type { Query } from './Query';
 
 export interface QueryState<TEntity = unknown> {
   queries: Query[];

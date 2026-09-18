@@ -1,12 +1,24 @@
-import type { MobxModelParams } from '@/interfaces/MobxModelParams';
+import type { Id } from '../../interfaces/Id';
+import type { ListParams } from '../../interfaces/ListParams';
+import type { MobxModelParams } from '../../interfaces/MobxModelParams';
+import type { PaginatedList } from '../../interfaces/PaginatedList';
 import {
   EntityActionType,
   type ModelMethods,
   type QueryHandler,
   type QueryHandlers,
-} from '@/interfaces/MobxModelTypes';
-import { mobxEntitiesStore } from '@/stores/MobxEntitiesStore';
+} from '../../interfaces/MobxModelTypes';
+import { mobxEntitiesStore } from '../../stores/MobxEntitiesStore';
 import { useMemo } from 'react';
+
+export type UseMobxModelReturn<
+  TEntity,
+  TFilters,
+  THandlers extends QueryHandlers<any, any>,
+> = ModelMethods<THandlers> & {
+  selectPaginatedList: (params: ListParams<TFilters>) => PaginatedList<TEntity>;
+  selectById: (id: Id) => TEntity | undefined;
+};
 
 export const useMobxModel = <
   TEntity = unknown,
@@ -14,7 +26,7 @@ export const useMobxModel = <
   THandlers extends QueryHandlers<any, any> = QueryHandlers<TEntity, TFilters>,
 >(
   args: MobxModelParams<TEntity, TFilters, THandlers>,
-) => {
+): UseMobxModelReturn<TEntity, TFilters, THandlers> => {
   const { handlers } = args;
   const modelStore = useMemo(
     () => mobxEntitiesStore.createStore<TEntity, TFilters>(args),
@@ -80,5 +92,5 @@ export const useMobxModel = <
     ...buildModelMethods(),
     selectPaginatedList: modelStore.selectPaginatedList,
     selectById: modelStore.selectById,
-  };
+  } as UseMobxModelReturn<TEntity, TFilters, THandlers>;
 };

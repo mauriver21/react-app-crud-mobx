@@ -1,6 +1,6 @@
-import type { Pagination } from '@/interfaces/Pagination';
-import type { PaginatedList } from '@/interfaces/PaginatedList';
-import type { Id } from '@/interfaces/Id';
+import type { Pagination } from './Pagination';
+import type { PaginatedList } from './PaginatedList';
+import type { Id } from './Id';
 
 export enum EntityActionType {
   List = 'List',

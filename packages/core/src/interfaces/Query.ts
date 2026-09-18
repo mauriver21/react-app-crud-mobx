@@ -1,4 +1,4 @@
-import type { PaginationResponse } from '@/interfaces/PaginationResponse';
+import type { PaginationResponse } from './PaginationResponse';
 import type { Id } from './Id';
 
 export type Query = {

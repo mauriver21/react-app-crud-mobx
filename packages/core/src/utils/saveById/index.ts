@@ -1,4 +1,4 @@
-import type { QueryState } from '@/interfaces/QueryState';
+import type { QueryState } from '../../interfaces/QueryState';
 
 export const saveById = <T>(params: {
   byId: QueryState<T>['byId'];

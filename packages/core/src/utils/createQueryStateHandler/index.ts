@@ -1,8 +1,8 @@
-import type { Id } from '@/interfaces/Id';
-import type { ListParams } from '@/interfaces/ListParams';
-import type { ListQueryParams } from '@/interfaces/ListQueryParams';
-import type { PaginatedList } from '@/interfaces/PaginatedList';
-import type { QueryState } from '@/interfaces/QueryState';
+import type { Id } from '../../interfaces/Id';
+import type { ListParams } from '../../interfaces/ListParams';
+import type { ListQueryParams } from '../../interfaces/ListQueryParams';
+import type { PaginatedList } from '../../interfaces/PaginatedList';
+import type { QueryState } from '../../interfaces/QueryState';
 
 export const createQueryStateHandler = <TEntity>(args: {
   queryState: QueryState<TEntity>;

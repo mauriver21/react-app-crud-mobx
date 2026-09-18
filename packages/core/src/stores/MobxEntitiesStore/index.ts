@@ -1,10 +1,10 @@
-import type { Id } from '@/interfaces/Id';
-import type { ListParams } from '@/interfaces/ListParams';
-import type { ListQueryParams } from '@/interfaces/ListQueryParams';
-import type { MobxEntityStore } from '@/interfaces/MobxEntityStore';
-import type { PaginatedList } from '@/interfaces/PaginatedList';
-import { createQueryState } from '@/utils/createQueryState';
-import { createQueryStateHandler } from '@/utils/createQueryStateHandler';
+import type { Id } from '../../interfaces/Id';
+import type { ListParams } from '../../interfaces/ListParams';
+import type { ListQueryParams } from '../../interfaces/ListQueryParams';
+import type { MobxEntityStore } from '../../interfaces/MobxEntityStore';
+import type { PaginatedList } from '../../interfaces/PaginatedList';
+import { createQueryState } from '../../utils/createQueryState';
+import { createQueryStateHandler } from '../../utils/createQueryStateHandler';
 import { makeAutoObservable, observable } from 'mobx';
 
 class MobxEntitiesStore {

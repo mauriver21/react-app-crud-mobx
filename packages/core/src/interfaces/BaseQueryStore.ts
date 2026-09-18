@@ -1,4 +1,4 @@
-import type { QueryState } from '@/interfaces/QueryState';
+import type { QueryState } from './QueryState';
 
 export interface BaseQueryStore<TEntity> {
   state: QueryState<TEntity>;

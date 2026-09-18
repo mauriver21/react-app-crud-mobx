@@ -1,5 +1,5 @@
 // Hook principal
-export { useMobxModel } from './models/useMobxModel';
+export { useMobxModel, type UseMobxModelReturn } from './models/useMobxModel';
 
 // Store
 export { mobxEntitiesStore } from './stores/MobxEntitiesStore';
