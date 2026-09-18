@@ -1,7 +1,6 @@
 import type { Id } from '@/interfaces/Id';
 import type { ListParams } from '@/interfaces/ListParams';
 import type { ListQueryParams } from '@/interfaces/ListQueryParams';
-import type { PaginatedList } from '@/interfaces/PaginatedList';
 import type { QueryFlags } from '@/interfaces/QueryFlags';
 import type { QueryState } from '@/interfaces/QueryState';
 import type { SelectedQuery } from '@/interfaces/SelectedQuery';
@@ -53,7 +52,10 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
     }
 
     if (foundQuery) {
-      foundQuery.entityIds = entityIds;
+      Object.assign(foundQuery, {
+        entityIds,
+        pagination: params.paginatedList.pagination,
+      });
     } else {
       queryState.queries.push({
         flags: {},

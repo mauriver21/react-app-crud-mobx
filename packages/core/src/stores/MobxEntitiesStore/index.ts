@@ -2,7 +2,6 @@ import type { Id } from '@/interfaces/Id';
 import type { ListParams } from '@/interfaces/ListParams';
 import type { ListQueryParams } from '@/interfaces/ListQueryParams';
 import type { MobxEntityStore } from '@/interfaces/MobxEntityStore';
-import type { PaginatedList } from '@/interfaces/PaginatedList';
 import type { SelectedQuery } from '@/interfaces/SelectedQuery';
 import { createQueryState } from '@/utils/createQueryState';
 import { createQueryStateHandler } from '@/utils/createQueryStateHandler';
