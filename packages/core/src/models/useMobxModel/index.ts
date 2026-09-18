@@ -1,14 +1,14 @@
-import type { Id } from '../../interfaces/Id';
-import type { ListParams } from '../../interfaces/ListParams';
-import type { MobxModelParams } from '../../interfaces/MobxModelParams';
-import type { PaginatedList } from '../../interfaces/PaginatedList';
+import type { Id } from '@/interfaces/Id';
+import type { ListParams } from '@/interfaces/ListParams';
+import type { MobxModelParams } from '@/interfaces/MobxModelParams';
+import type { PaginatedList } from '@/interfaces/PaginatedList';
 import {
   EntityActionType,
   type ModelMethods,
   type QueryHandler,
   type QueryHandlers,
-} from '../../interfaces/MobxModelTypes';
-import { mobxEntitiesStore } from '../../stores/MobxEntitiesStore';
+} from '@/interfaces/MobxModelTypes';
+import { mobxEntitiesStore } from '@/stores/MobxEntitiesStore';
 import { useMemo } from 'react';
 
 export type UseMobxModelReturn<

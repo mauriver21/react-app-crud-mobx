@@ -1,5 +1,5 @@
-import type { PaginatedList } from './PaginatedList';
-import type { Pagination } from './Pagination';
+import type { PaginatedList } from '@/interfaces/PaginatedList';
+import type { Pagination } from '@/interfaces/Pagination';
 
 export type ListQueryParams<TEntity, TFilters = unknown> = {
   paginatedList: PaginatedList<TEntity>;

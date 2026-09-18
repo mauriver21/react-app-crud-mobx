@@ -1,4 +1,4 @@
-import type { Pagination } from './Pagination';
+import type { Pagination } from '@/interfaces/Pagination';
 
 export type ListParams<TFilters = unknown> = {
   pagination: Pagination;

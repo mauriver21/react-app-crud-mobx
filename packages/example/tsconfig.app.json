@@ -21,5 +21,8 @@
       "use-mobx-model": ["../core/src"]
     }
   },
-  "include": ["src"]
+  "include": ["src"],
+  "references": [
+    { "path": "../core/tsconfig.lib.json" }
+  ]
 }
