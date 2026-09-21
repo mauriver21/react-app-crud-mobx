@@ -51,30 +51,48 @@ export const useMobxModel = <
           modelMethods[key] = async (
             ...params: Parameters<typeof handler.apiFn>
           ) => {
-            modelStore.save(...params);
+            try {
+              const entity = await handler.apiFn(...params);
+              modelStore.save(entity);
+            } catch (error) {
+              throw error;
+            }
           };
           break;
         case EntityActionType.Update:
           modelMethods[key] = async (
             ...params: Parameters<typeof handler.apiFn>
           ) => {
-            modelStore.save(...params);
+            try {
+              const entity = await handler.apiFn(...params);
+              modelStore.save(entity);
+            } catch (error) {
+              throw error;
+            }
           };
           break;
         case EntityActionType.Read:
           modelMethods[key] = async (
             ...params: Parameters<typeof handler.apiFn>
           ) => {
-            const entity = await handler.apiFn(...params);
-            modelStore.save(entity);
-            return entity;
+            try {
+              const entity = await handler.apiFn(...params);
+              modelStore.save(entity);
+            } catch (error) {
+              throw error;
+            }
           };
           break;
         case EntityActionType.Remove:
           modelMethods[key] = async (
             ...params: Parameters<typeof handler.apiFn>
           ) => {
-            modelStore.remove(...params);
+            try {
+              await handler.apiFn(...params);
+              modelStore.remove(...params);
+            } catch (error) {
+              throw error;
+            }
           };
           break;
         default:
