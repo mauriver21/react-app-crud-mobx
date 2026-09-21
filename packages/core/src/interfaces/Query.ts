@@ -5,6 +5,7 @@ import type { QueryFlags } from '@/interfaces/QueryFlags';
 export type Query = {
   flags?: QueryFlags;
   queryId: string;
+  queryKey?: string;
   entityIds?: Id[];
   pagination?: PaginationResponse;
 };

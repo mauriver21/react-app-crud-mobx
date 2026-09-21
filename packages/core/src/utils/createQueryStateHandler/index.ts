@@ -26,6 +26,7 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
 
   const buildQueryId = (params: ListParams) => {
     return JSON.stringify({
+      queryKey: params?.queryKey,
       pagination: params.pagination,
       filters: params?.filters,
     });
@@ -57,7 +58,7 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
     }
 
     lastKnownPagination = params.paginatedList.pagination;
-    lastKnownParams = { pagination: params.pagination, filters: params.filters };
+    lastKnownParams = { pagination: params.pagination, filters: params.filters, queryKey: params.queryKey };
 
     if (foundQuery) {
       Object.assign(foundQuery, {
@@ -68,6 +69,7 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
       queryState.queries.push({
         flags: {},
         queryId,
+        queryKey: params.queryKey,
         entityIds,
         pagination: params.paginatedList.pagination,
       });
@@ -96,8 +98,12 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
     const queryId = buildQueryId(params);
     const foundQuery = findQuery(queryId);
 
+    const flags = foundQuery?.flags ?? {};
+    const autoHeal = !flags.listed && !flags.listing;
+
     return {
-      ...foundQuery?.flags,
+      ...flags,
+      autoHeal,
       content: queryIdsToEntities(foundQuery?.entityIds || []),
       pagination: {
         page: 0,
@@ -134,16 +140,20 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
     queryState.queries.splice(0, queryState.queries.length);
   };
 
-  // Keeps the last consulted query; invalidates all others (used after remove + refetch)
+  // Keeps the last consulted query; invalidates all other queries with the same queryKey
   const invalidateOtherQueries = () => {
     if (!lastKnownParams) {
       invalidateQueries();
       return;
     }
     const keepQueryId = buildQueryId(lastKnownParams);
-    const keepQuery = findQuery(keepQueryId);
-    queryState.queries.splice(0, queryState.queries.length);
-    if (keepQuery) queryState.queries.push(keepQuery);
+    const keepQueryKey = lastKnownParams.queryKey;
+
+    // Remove only queries that share the same queryKey (or have no queryKey if lastKnownParams has none)
+    const surviving = queryState.queries.filter(
+      (q) => q.queryKey !== keepQueryKey || q.queryId === keepQueryId,
+    );
+    queryState.queries.splice(0, queryState.queries.length, ...surviving);
   };
 
   return {

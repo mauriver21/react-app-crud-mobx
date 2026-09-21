@@ -27,12 +27,14 @@ export const ProductsList: React.FC = observer(() => {
   const [removingId, setRemovingId] = useState<string | undefined>();
   const [selectedProductId, setSelectedProductId] = useState<string>('');
 
-  const { content, pagination: paginationMeta } =
-    productModel.selectPaginatedProducts({ pagination });
+  const listParams = { pagination, queryKey: 'products-table' };
+
+  const { content, pagination: paginationMeta, autoHeal } =
+    productModel.selectPaginatedProducts(listParams);
 
   useEffect(() => {
-    productModel.list({ pagination });
-  }, [pagination]);
+    if (autoHeal) productModel.list(listParams);
+  }, [pagination, autoHeal]);
 
   const handlePageChange = (_: unknown, newPage: number) => {
     setPagination((prev) => ({ ...prev, page: newPage }));

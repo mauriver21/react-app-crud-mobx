@@ -5,4 +5,5 @@ export type ListQueryParams<TEntity, TFilters = unknown> = {
   paginatedList: PaginatedList<TEntity>;
   pagination: Pagination;
   filters?: TFilters;
+  queryKey?: string;
 };
