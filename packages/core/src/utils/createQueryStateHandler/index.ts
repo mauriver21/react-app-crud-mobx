@@ -12,8 +12,11 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
 }) => {
   const { queryState, entityIdName } = args;
 
-  let lastKnownPagination: PaginationResponse | undefined;
-  let lastKnownParams: ListParams | undefined;
+  const DEFAULT_QUERY_KEY = '__default__';
+  const lastKnownPagination = new Map<string, PaginationResponse>();
+  const lastKnownParams = new Map<string, ListParams>();
+
+  const getQueryKey = (params: ListParams) => params.queryKey ?? DEFAULT_QUERY_KEY;
 
   const saveById = (entity: TEntity) => {
     const id = (entity as any)?.[entityIdName] as string;
@@ -57,8 +60,9 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
       saveById(entity);
     }
 
-    lastKnownPagination = params.paginatedList.pagination;
-    lastKnownParams = { pagination: params.pagination, filters: params.filters, queryKey: params.queryKey };
+    const key = getQueryKey(params);
+    lastKnownPagination.set(key, params.paginatedList.pagination);
+    lastKnownParams.set(key, { pagination: params.pagination, filters: params.filters, queryKey: params.queryKey });
 
     if (foundQuery) {
       Object.assign(foundQuery, {
@@ -100,6 +104,7 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
 
     const flags = foundQuery?.flags ?? {};
     const autoHeal = !flags.listed && !flags.listing;
+    const knownPagination = lastKnownPagination.get(getQueryKey(params));
 
     return {
       ...flags,
@@ -110,7 +115,7 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
         size: 10,
         totalElements: 0,
         totalPages: 0,
-        ...lastKnownPagination,
+        ...knownPagination,
         ...foundQuery?.pagination,
       },
     };
@@ -134,24 +139,26 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
     return queryState.byId.get(String(entityId));
   };
 
-  const getLastParams = (): ListParams | undefined => lastKnownParams;
+  const getLastParams = (queryKey?: string): ListParams | undefined =>
+    lastKnownParams.get(queryKey ?? DEFAULT_QUERY_KEY);
 
   const invalidateQueries = () => {
     queryState.queries.splice(0, queryState.queries.length);
   };
 
-  // Keeps the last consulted query; invalidates all other queries with the same queryKey
-  const invalidateOtherQueries = () => {
-    if (!lastKnownParams) {
+  // Keeps the last consulted query of a given queryKey; invalidates all other queries with the same queryKey
+  const invalidateOtherQueries = (queryKey?: string) => {
+    const key = queryKey ?? DEFAULT_QUERY_KEY;
+    const params = lastKnownParams.get(key);
+
+    if (!params) {
       invalidateQueries();
       return;
     }
-    const keepQueryId = buildQueryId(lastKnownParams);
-    const keepQueryKey = lastKnownParams.queryKey;
 
-    // Remove only queries that share the same queryKey (or have no queryKey if lastKnownParams has none)
+    const keepQueryId = buildQueryId(params);
     const surviving = queryState.queries.filter(
-      (q) => q.queryKey !== keepQueryKey || q.queryId === keepQueryId,
+      (q) => q.queryKey !== params.queryKey || q.queryId === keepQueryId,
     );
     queryState.queries.splice(0, queryState.queries.length, ...surviving);
   };

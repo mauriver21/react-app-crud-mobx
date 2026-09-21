@@ -53,16 +53,16 @@ class MobxEntitiesStore {
       this.stores[entityName].stateHandler.setListed(params);
     };
 
-    const getLastParams = () => {
-      return this.stores[entityName].stateHandler.getLastParams();
+    const getLastParams = (queryKey?: string) => {
+      return this.stores[entityName].stateHandler.getLastParams(queryKey);
     };
 
     const invalidateQueries = () => {
       this.stores[entityName].stateHandler.invalidateQueries();
     };
 
-    const invalidateOtherQueries = () => {
-      this.stores[entityName].stateHandler.invalidateOtherQueries();
+    const invalidateOtherQueries = (queryKey?: string) => {
+      this.stores[entityName].stateHandler.invalidateOtherQueries(queryKey);
     };
 
     const selectPaginatedList = (

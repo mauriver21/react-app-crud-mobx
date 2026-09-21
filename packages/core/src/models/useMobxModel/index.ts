@@ -22,11 +22,11 @@ export const useMobxModel = <
     [],
   );
 
-  const refetch = async () => {
+  const refetch = async (queryKey?: string) => {
     const listEntry = Object.entries(handlers).find(
       ([, handler]) => handler.action === EntityActionType.List,
     );
-    const lastParams = modelStore.getLastParams() as ListQueryParams<
+    const lastParams = modelStore.getLastParams(queryKey) as ListQueryParams<
       TEntity,
       TFilters
     >;
@@ -34,11 +34,14 @@ export const useMobxModel = <
     if (listEntry && lastParams) {
       const [, listHandler] = listEntry;
       modelStore.setListing({ params: lastParams, flag: true });
-      const paginatedList = await listHandler.apiFn(lastParams);
-      modelStore.list({ ...lastParams, paginatedList });
-      modelStore.setListed(lastParams);
-      modelStore.invalidateOtherQueries();
-      modelStore.setListing({ params: lastParams, flag: false });
+      try {
+        const paginatedList = await listHandler.apiFn(lastParams);
+        modelStore.list({ ...lastParams, paginatedList });
+        modelStore.setListed(lastParams);
+        modelStore.invalidateOtherQueries(lastParams.queryKey);
+      } finally {
+        modelStore.setListing({ params: lastParams, flag: false });
+      }
     }
   };
 
