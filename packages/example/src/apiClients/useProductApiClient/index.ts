@@ -21,7 +21,7 @@ export const useProductApiClient = () => {
   };
 
   const update = async (product: Product) => {
-    const { data } = await api.post<Product>(
+    const { data } = await api.put<Product>(
       `/products/${product?.id}`,
       product,
     );

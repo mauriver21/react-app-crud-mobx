@@ -53,14 +53,6 @@ class MobxEntitiesStore {
       this.stores[entityName].stateHandler.setListed(params);
     };
 
-    const setReading = (args: { id: Id; flag: boolean }) => {};
-
-    const setCreating = (args: { id: Id; flag: boolean }) => {};
-
-    const setUpdating = (args: { id: Id; flag: boolean }) => {};
-
-    const setRemoving = (args: { id: Id; flag: boolean }) => {};
-
     const selectPaginatedList = (
       params: ListParams<TFilters>,
     ): SelectedQuery<TEntity> => {
@@ -79,10 +71,6 @@ class MobxEntitiesStore {
       selectById,
       setListing,
       setListed,
-      setReading,
-      setCreating,
-      setUpdating,
-      setRemoving,
     };
   }
 }
