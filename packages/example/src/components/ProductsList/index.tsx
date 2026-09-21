@@ -1,4 +1,5 @@
 import { useProductModel } from '@/models/useProductModel';
+import { ProductSelect } from '@/components/ProductSelect';
 import {
   Button,
   CircularProgress,
@@ -23,7 +24,8 @@ export const ProductsList: React.FC = observer(() => {
   const navigate = useNavigate();
   const productModel = useProductModel();
   const [pagination, setPagination] = useState({ page: 0, size: 10 });
-  const [removingId, setRemovingId] = useState<string | null>(null);
+  const [removingId, setRemovingId] = useState<string | undefined>();
+  const [selectedProductId, setSelectedProductId] = useState<string>('');
 
   const { content, pagination: paginationMeta } =
     productModel.selectPaginatedProducts({ pagination });
@@ -40,12 +42,12 @@ export const ProductsList: React.FC = observer(() => {
     setPagination({ page: 0, size: parseInt(e.target.value, 10) });
   };
 
-  const handleRemove = async (id: string) => {
-    setRemovingId(id);
+  const handleRemove = async (id: string | undefined) => {
     try {
+      setRemovingId(id);
       await productModel.remove(id);
     } finally {
-      setRemovingId(null);
+      setRemovingId(undefined);
     }
   };
 
@@ -62,13 +64,21 @@ export const ProductsList: React.FC = observer(() => {
         <Typography variant="h6">
           Products ({paginationMeta.totalElements})
         </Typography>
-        <Button
-          variant="contained"
-          size="small"
-          onClick={() => navigate('/products/create')}
-        >
-          New product
-        </Button>
+        <Stack sx={{ flexDirection: 'row', gap: 2, alignItems: 'center' }}>
+          <ProductSelect
+            value={selectedProductId}
+            onValueChange={setSelectedProductId}
+            label="Filter by product"
+          />
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => navigate('/products/create')}
+            sx={{ whiteSpace: 'nowrap' }}
+          >
+            New product
+          </Button>
+        </Stack>
       </Stack>
       <TableContainer sx={{ overflow: 'auto' }}>
         <Table>
@@ -85,7 +95,9 @@ export const ProductsList: React.FC = observer(() => {
                 <TableCell>{product.name}</TableCell>
                 <TableCell align="right">${product.price.toFixed(2)}</TableCell>
                 <TableCell align="right" padding="none" sx={{ pr: 1 }}>
-                  <Stack sx={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                  <Stack
+                    sx={{ flexDirection: 'row', justifyContent: 'flex-end' }}
+                  >
                     <IconButton
                       size="small"
                       onClick={() => navigate(`/products/${product.id}/edit`)}

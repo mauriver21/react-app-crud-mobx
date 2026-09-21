@@ -62,7 +62,7 @@ export const useProductModel = () => {
     return mobxModel.update(product);
   };
 
-  const remove = (id: Id) => {
+  const remove = (id: Id | undefined) => {
     return mobxModel.remove(id);
   };
 
