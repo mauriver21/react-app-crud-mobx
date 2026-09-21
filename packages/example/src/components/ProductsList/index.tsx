@@ -1,7 +1,9 @@
 import { useProductModel } from '@/models/useProductModel';
 import {
+  Button,
   IconButton,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -20,12 +22,8 @@ export const ProductsList: React.FC = observer(() => {
   const productModel = useProductModel();
   const [pagination, setPagination] = useState({ page: 0, size: 10 });
 
-  const {
-    content,
-    pagination: paginationMeta,
-    listed,
-  } = productModel.selectPaginatedProducts({ pagination });
-
+  const { content, pagination: paginationMeta } =
+    productModel.selectPaginatedProducts({ pagination });
 
   useEffect(() => {
     productModel.list({ pagination });
@@ -41,10 +39,25 @@ export const ProductsList: React.FC = observer(() => {
 
   return (
     <Paper sx={{ overflow: 'auto', display: 'grid' }}>
-      <Typography variant="h6" sx={{ p: 2 }}>
-        Products ({paginationMeta.totalElements}){' '}
-        {listed ? 'Loaded' : 'Initial loading...'}
-      </Typography>
+      <Stack
+        sx={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          p: 2,
+        }}
+      >
+        <Typography variant="h6">
+          Products ({paginationMeta.totalElements})
+        </Typography>
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => navigate('/products/create')}
+        >
+          New product
+        </Button>
+      </Stack>
       <TableContainer sx={{ overflow: 'auto' }}>
         <Table>
           <TableHead>

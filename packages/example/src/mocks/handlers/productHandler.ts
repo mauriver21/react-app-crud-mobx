@@ -2,6 +2,7 @@ import { delay, http, HttpResponse } from 'msw';
 import type { Product } from '@/interfaces/Product';
 import { data } from '@/mocks/data';
 import { ENV } from '@/constants/env';
+import { faker } from '@/utils/faker';
 import { paginateData } from 'use-mobx-model';
 
 export const productHandler = [
@@ -40,7 +41,8 @@ export const productHandler = [
   // Create
   http.post(`${ENV.API_BASE_URL}/products`, async ({ request }) => {
     await delay(650);
-    const product = (await request.json()) as Product;
+    const input = (await request.json()) as Omit<Product, 'id'>;
+    const product: Product = { ...input, id: faker.string.uuid() };
     data.products = [...data.products, product];
     return HttpResponse.json(product, { status: 201 });
   }),

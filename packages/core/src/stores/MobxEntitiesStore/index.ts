@@ -53,6 +53,10 @@ class MobxEntitiesStore {
       this.stores[entityName].stateHandler.setListed(params);
     };
 
+    const invalidateQueries = () => {
+      this.stores[entityName].stateHandler.invalidateQueries();
+    };
+
     const selectPaginatedList = (
       params: ListParams<TFilters>,
     ): SelectedQuery<TEntity> => {
@@ -71,6 +75,7 @@ class MobxEntitiesStore {
       selectById,
       setListing,
       setListed,
+      invalidateQueries,
     };
   }
 }

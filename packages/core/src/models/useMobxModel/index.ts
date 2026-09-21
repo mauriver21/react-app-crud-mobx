@@ -113,5 +113,6 @@ export const useMobxModel = <
     ...buildModelMethods(),
     selectPaginatedList: modelStore.selectPaginatedList,
     selectById: modelStore.selectById,
+    invalidateQueries: modelStore.invalidateQueries,
   };
 };

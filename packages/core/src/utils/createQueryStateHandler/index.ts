@@ -126,6 +126,10 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
     return queryState.byId.get(String(entityId));
   };
 
+  const invalidateQueries = () => {
+    queryState.queries.splice(0, queryState.queries.length);
+  };
+
   return {
     saveById,
     saveQuery,
@@ -134,5 +138,6 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
     selectEntity,
     setListing,
     setListed,
+    invalidateQueries,
   };
 };
