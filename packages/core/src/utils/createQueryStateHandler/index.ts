@@ -1,6 +1,7 @@
 import type { Id } from '@/interfaces/Id';
 import type { ListParams } from '@/interfaces/ListParams';
 import type { ListQueryParams } from '@/interfaces/ListQueryParams';
+import type { PaginationResponse } from '@/interfaces/PaginationResponse';
 import type { QueryFlags } from '@/interfaces/QueryFlags';
 import type { QueryState } from '@/interfaces/QueryState';
 import type { SelectedQuery } from '@/interfaces/SelectedQuery';
@@ -10,6 +11,8 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
   entityIdName: string;
 }) => {
   const { queryState, entityIdName } = args;
+
+  let lastKnownPagination: PaginationResponse | undefined;
 
   const saveById = (entity: TEntity) => {
     const id = (entity as any)?.[entityIdName] as string;
@@ -51,6 +54,8 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
       entityIds.push((entity as any)?.[entityIdName]);
       saveById(entity);
     }
+
+    lastKnownPagination = params.paginatedList.pagination;
 
     if (foundQuery) {
       Object.assign(foundQuery, {
@@ -97,6 +102,7 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
         size: 10,
         totalElements: 0,
         totalPages: 0,
+        ...lastKnownPagination,
         ...foundQuery?.pagination,
       },
     };

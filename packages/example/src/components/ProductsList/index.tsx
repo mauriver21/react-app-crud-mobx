@@ -26,6 +26,7 @@ export const ProductsList: React.FC = observer(() => {
     listed,
   } = productModel.selectPaginatedProducts({ pagination });
 
+
   useEffect(() => {
     productModel.list({ pagination });
   }, [pagination]);
