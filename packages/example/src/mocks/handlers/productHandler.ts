@@ -29,17 +29,18 @@ export const productHandler = [
     });
   }),
   // Read
-  http.get(`${ENV.API_BASE_URL}/products/:id`, ({ params }) => {
+  http.get(`${ENV.API_BASE_URL}/products/:id`, async ({ params }) => {
+    await delay(650);
     const product = data.products.find(({ id }) => id === params.id);
     return product
-      ? HttpResponse.json({ data: product })
+      ? HttpResponse.json(product)
       : HttpResponse.json({ message: 'Not found' }, { status: 404 });
   }),
   // Create
   http.post(`${ENV.API_BASE_URL}/products`, async ({ request }) => {
     const product = (await request.json()) as Product;
     data.products = [...data.products, product];
-    return HttpResponse.json({ data: product }, { status: 201 });
+    return HttpResponse.json(product, { status: 201 });
   }),
   // Update
   http.put(`${ENV.API_BASE_URL}/products/:id`, async ({ params, request }) => {
@@ -51,7 +52,7 @@ export const productHandler = [
     data.products = data.products.map((item) =>
       item.id === current.id ? product : item,
     );
-    return HttpResponse.json({ data: product });
+    return HttpResponse.json(product);
   }),
   // Remove
   http.delete(`${ENV.API_BASE_URL}/products/:id`, ({ params }) => {
@@ -59,6 +60,6 @@ export const productHandler = [
     if (!product)
       return HttpResponse.json({ message: 'Not found' }, { status: 404 });
     data.products = data.products.filter(({ id }) => id !== params.id);
-    return HttpResponse.json({ data: product });
+    return HttpResponse.json(product);
   }),
 ];

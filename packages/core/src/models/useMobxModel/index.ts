@@ -35,11 +35,13 @@ export const useMobxModel = <
             const listParams = params[0];
             modelStore.setListing({ params: listParams, flag: true });
             try {
+              const paginatedList = await handler.apiFn(...params);
               modelStore.list({
                 ...listParams,
-                paginatedList: await handler.apiFn(...params),
+                paginatedList,
               });
               modelStore.setListed(listParams);
+              return paginatedList;
             } catch (error) {
               throw error;
             } finally {
@@ -54,6 +56,7 @@ export const useMobxModel = <
             try {
               const entity = await handler.apiFn(...params);
               modelStore.save(entity);
+              return entity;
             } catch (error) {
               throw error;
             }
@@ -66,6 +69,7 @@ export const useMobxModel = <
             try {
               const entity = await handler.apiFn(...params);
               modelStore.save(entity);
+              return entity;
             } catch (error) {
               throw error;
             }
@@ -78,6 +82,7 @@ export const useMobxModel = <
             try {
               const entity = await handler.apiFn(...params);
               modelStore.save(entity);
+              return entity;
             } catch (error) {
               throw error;
             }
@@ -88,8 +93,9 @@ export const useMobxModel = <
             ...params: Parameters<typeof handler.apiFn>
           ) => {
             try {
-              await handler.apiFn(...params);
+              const entity = await handler.apiFn(...params);
               modelStore.remove(...params);
+              return entity;
             } catch (error) {
               throw error;
             }

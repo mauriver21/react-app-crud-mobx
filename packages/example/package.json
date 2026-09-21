@@ -10,16 +10,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "use-mobx-model": "workspace:*",
     "@emotion/react": "^11.14.0",
+    "@heroicons/react": "^2.2.0",
     "@emotion/styled": "^11.14.1",
+    "@hookform/resolvers": "^5.9.1",
     "@mui/material": "^9.4.0",
     "axios": "^1.20.0",
     "mobx": "^7.0.3",
     "mobx-react": "^10.0.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.3"
+    "react-hook-form": "^7.88.0",
+    "react-router-dom": "^7.18.3",
+    "use-mobx-model": "workspace:*",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

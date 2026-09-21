@@ -13,11 +13,11 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
 
   const saveById = (entity: TEntity) => {
     const id = (entity as any)?.[entityIdName] as string;
-    queryState.byId[String(id)] = entity;
+    queryState.byId.set(String(id), entity);
   };
 
   const removeById = (id: Id) => {
-    id && delete queryState.byId[id];
+    id && queryState.byId.delete(String(id));
   };
 
   const buildQueryId = (params: ListParams) => {
@@ -34,7 +34,8 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
   const queryIdsToEntities = (entityIds: Id[]): TEntity[] => {
     const entities: TEntity[] = [];
     for (const id of entityIds) {
-      if (id) entities.push(queryState.byId[String(id)]);
+      const entity = queryState.byId.get(String(id));
+      if (id && entity) entities.push(entity);
     }
 
     return entities;
@@ -116,7 +117,7 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
   };
 
   const selectEntity = (entityId: Id): TEntity | undefined => {
-    return queryState.byId[String(entityId)];
+    return queryState.byId.get(String(entityId));
   };
 
   return {

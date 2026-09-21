@@ -67,6 +67,7 @@ export const useProductModel = () => {
   };
 
   const selectPaginatedProducts = mobxModel.selectPaginatedList;
+  const selectProduct = mobxModel.selectById;
 
   return {
     list,
@@ -75,5 +76,6 @@ export const useProductModel = () => {
     update,
     remove,
     selectPaginatedProducts,
+    selectProduct,
   };
 };

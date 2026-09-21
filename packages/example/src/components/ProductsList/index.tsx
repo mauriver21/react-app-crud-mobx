@@ -1,5 +1,6 @@
 import { useProductModel } from '@/models/useProductModel';
 import {
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -12,8 +13,10 @@ import {
 } from '@mui/material';
 import { observer } from 'mobx-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const ProductsList: React.FC = observer(() => {
+  const navigate = useNavigate();
   const productModel = useProductModel();
   const [pagination, setPagination] = useState({ page: 0, size: 10 });
 
@@ -47,6 +50,7 @@ export const ProductsList: React.FC = observer(() => {
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell align="right">Price</TableCell>
+              <TableCell width={56} />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -54,6 +58,14 @@ export const ProductsList: React.FC = observer(() => {
               <TableRow key={product.id} hover>
                 <TableCell>{product.name}</TableCell>
                 <TableCell align="right">${product.price.toFixed(2)}</TableCell>
+                <TableCell align="center" padding="none">
+                  <IconButton
+                    size="small"
+                    onClick={() => navigate(`/products/${product.id}/edit`)}
+                  >
+                    Edit
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

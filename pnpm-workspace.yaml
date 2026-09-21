@@ -1,4 +1,4 @@
 packages:
   - 'packages/*'
 allowBuilds:
-  msw: set this to true or false
+  msw: true
