@@ -26,6 +26,8 @@ export type { BaseQueryStore } from './interfaces/BaseQueryStore';
 export type { QueryState } from './interfaces/QueryState';
 export type { QueryStateHandler } from './interfaces/QueryStateHandler';
 export type { Query } from './interfaces/Query';
+export type { QueryFlags } from './interfaces/QueryFlags';
+export type { SelectedQuery } from './interfaces/SelectedQuery';
 
 // Interfaces de paginación y lista
 export type { PaginatedList } from './interfaces/PaginatedList';
