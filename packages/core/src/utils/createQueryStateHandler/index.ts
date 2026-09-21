@@ -13,6 +13,7 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
   const { queryState, entityIdName } = args;
 
   let lastKnownPagination: PaginationResponse | undefined;
+  let lastKnownParams: ListParams | undefined;
 
   const saveById = (entity: TEntity) => {
     const id = (entity as any)?.[entityIdName] as string;
@@ -56,6 +57,7 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
     }
 
     lastKnownPagination = params.paginatedList.pagination;
+    lastKnownParams = { pagination: params.pagination, filters: params.filters };
 
     if (foundQuery) {
       Object.assign(foundQuery, {
@@ -126,8 +128,22 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
     return queryState.byId.get(String(entityId));
   };
 
+  const getLastParams = (): ListParams | undefined => lastKnownParams;
+
   const invalidateQueries = () => {
     queryState.queries.splice(0, queryState.queries.length);
+  };
+
+  // Keeps the last consulted query; invalidates all others (used after remove + refetch)
+  const invalidateOtherQueries = () => {
+    if (!lastKnownParams) {
+      invalidateQueries();
+      return;
+    }
+    const keepQueryId = buildQueryId(lastKnownParams);
+    const keepQuery = findQuery(keepQueryId);
+    queryState.queries.splice(0, queryState.queries.length);
+    if (keepQuery) queryState.queries.push(keepQuery);
   };
 
   return {
@@ -138,6 +154,8 @@ export const createQueryStateHandler = <TEntity, TFilters = any>(args: {
     selectEntity,
     setListing,
     setListed,
+    getLastParams,
     invalidateQueries,
+    invalidateOtherQueries,
   };
 };

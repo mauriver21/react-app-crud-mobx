@@ -1,6 +1,7 @@
 import { useProductModel } from '@/models/useProductModel';
 import {
   Button,
+  CircularProgress,
   IconButton,
   Paper,
   Stack,
@@ -13,6 +14,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -21,6 +23,7 @@ export const ProductsList: React.FC = observer(() => {
   const navigate = useNavigate();
   const productModel = useProductModel();
   const [pagination, setPagination] = useState({ page: 0, size: 10 });
+  const [removingId, setRemovingId] = useState<string | null>(null);
 
   const { content, pagination: paginationMeta } =
     productModel.selectPaginatedProducts({ pagination });
@@ -35,6 +38,15 @@ export const ProductsList: React.FC = observer(() => {
 
   const handleRowsPerPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPagination({ page: 0, size: parseInt(e.target.value, 10) });
+  };
+
+  const handleRemove = async (id: string) => {
+    setRemovingId(id);
+    try {
+      await productModel.remove(id);
+    } finally {
+      setRemovingId(null);
+    }
   };
 
   return (
@@ -64,7 +76,7 @@ export const ProductsList: React.FC = observer(() => {
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell align="right">Price</TableCell>
-              <TableCell width={56} />
+              <TableCell width={96} />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -72,13 +84,27 @@ export const ProductsList: React.FC = observer(() => {
               <TableRow key={product.id} hover>
                 <TableCell>{product.name}</TableCell>
                 <TableCell align="right">${product.price.toFixed(2)}</TableCell>
-                <TableCell align="center" padding="none">
-                  <IconButton
-                    size="small"
-                    onClick={() => navigate(`/products/${product.id}/edit`)}
-                  >
-                    Edit
-                  </IconButton>
+                <TableCell align="right" padding="none" sx={{ pr: 1 }}>
+                  <Stack sx={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                    <IconButton
+                      size="small"
+                      onClick={() => navigate(`/products/${product.id}/edit`)}
+                    >
+                      <PencilSquareIcon style={{ width: 18, height: 18 }} />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      color="error"
+                      disabled={removingId === product.id}
+                      onClick={() => handleRemove(product.id)}
+                    >
+                      {removingId === product.id ? (
+                        <CircularProgress size={18} color="error" />
+                      ) : (
+                        <TrashIcon style={{ width: 18, height: 18 }} />
+                      )}
+                    </IconButton>
+                  </Stack>
                 </TableCell>
               </TableRow>
             ))}

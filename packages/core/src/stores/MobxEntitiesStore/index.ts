@@ -53,8 +53,16 @@ class MobxEntitiesStore {
       this.stores[entityName].stateHandler.setListed(params);
     };
 
+    const getLastParams = () => {
+      return this.stores[entityName].stateHandler.getLastParams();
+    };
+
     const invalidateQueries = () => {
       this.stores[entityName].stateHandler.invalidateQueries();
+    };
+
+    const invalidateOtherQueries = () => {
+      this.stores[entityName].stateHandler.invalidateOtherQueries();
     };
 
     const selectPaginatedList = (
@@ -75,7 +83,9 @@ class MobxEntitiesStore {
       selectById,
       setListing,
       setListed,
+      getLastParams,
       invalidateQueries,
+      invalidateOtherQueries,
     };
   }
 }
